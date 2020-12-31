@@ -1,17 +1,18 @@
-#JSP블로그 프로젝트
-##환경
--JDK 1.8
--TOMCAT 9.0
--STS TOOL
--MYSQL 8.0
--POSTMAN
--LOMBOK
--GSON(JSON파싱)
--인코딩(utf-8)
--git
+# JSP블로그 프로젝트
+## 환경
+- JDK 1.8
+- TOMCAT 9.0
+- STS TOOL
+- MYSQL 8.0
+- POSTMAN
+- LOMBOK
+- GSON(JSON파싱)
+- 인코딩(utf-8)
+- git
 
 
-##MYSQL 데이터베이스 생성 및 사용자 생성
+
+## MYSQL 데이터베이스 생성 및 사용자 생성
 ```SQL
 create user 'bloguser'@'%' identified by 'bitc5600';
 grant all privileges on *.* to 'bloguser'@'%';
