@@ -20,8 +20,9 @@ create database blog;
 use blog;
 ```
 
-##MYSQL 테이블 생성
--bloguser 사용자 생성
+## MYSQL 테이블 생성
+- bloguser 사용자 생성
+- use blog;  데이터 베이스 선택
 
 ```SQL
 CREATE TABLE users(
