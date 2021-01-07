@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,7 +45,14 @@ public class UserController extends HttpServlet {
 		// http://localhost:8080/blog/user?cmd=loginForm
 		if (cmd.equals("loginForm")) {
 			// 아이디 기억
-			response.sendRedirect("user/loginForm.jsp");
+			
+			//이제 response.sendRedirect쓰지말고 dispatcher써야함
+			//왜냐하면 response.sendRedirect 필터를 타기 때문이다.
+			//dispatcher은 내부적으로 동작하기때문에 필터를 안탄다.
+			RequestDispatcher dis = request.getRequestDispatcher("user/loginForm.jsp");
+			dis.forward(request, response);
+			
+			//response.sendRedirect("user/loginForm.jsp");
 		} else if (cmd.equals("login")) {
 			// 서비스 호출
 			String username = request.getParameter("username");
@@ -56,14 +64,19 @@ public class UserController extends HttpServlet {
 			if (userEntity != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("principal", userEntity); // 인증주체
-				response.sendRedirect("index.jsp");
+				
+				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+				dis.forward(request, response);
+				//response.sendRedirect("index.jsp");
 
 			} else {
 				Script.back(response, "로그인실패");
 			}
 
 		} else if (cmd.equals("joinForm")) {
-			response.sendRedirect("user/joinForm.jsp");
+			RequestDispatcher dis = request.getRequestDispatcher("user/joinForm.jsp");
+			dis.forward(request, response);
+			//response.sendRedirect("user/joinForm.jsp");
 		} else if (cmd.equals("join")) {
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -79,7 +92,9 @@ public class UserController extends HttpServlet {
 			System.out.println("회원가입 : " + dto);
 			int result = userService.회원가입(dto);
 			if (result == 1) {
-				response.sendRedirect("index.jsp");
+				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+				dis.forward(request, response);
+				//response.sendRedirect("index.jsp");
 			} else {
 				Script.back(response, "회원가입 실패");
 
@@ -99,7 +114,10 @@ public class UserController extends HttpServlet {
 		} else if (cmd.equals("logout")) {
 			HttpSession session = request.getSession();
 			session.invalidate();
-			response.sendRedirect("index.jsp");
-		}
+			RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+			dis.forward(request, response);
+			//response.sendRedirect("index.jsp");
+		}	
+		
 	}
 }
