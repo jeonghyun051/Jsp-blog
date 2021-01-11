@@ -18,7 +18,7 @@ public class DB {
 		Context envContext  = (Context)initContext.lookup("java:/comp/env");
 		DataSource ds = (DataSource)envContext.lookup("mysql/bloguser");
 		Connection conn = ds.getConnection();
-		System.out.println("DB연결 성공");
+		//System.out.println("DB연결 성공");
 		return conn;
 	} catch (Exception e) {
 		System.out.println("DB연결 실패" + e.getMessage());

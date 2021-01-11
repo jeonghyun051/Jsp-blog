@@ -1,10 +1,10 @@
-package com.cos.blog.domain.board.dto;
+package com.cos.blog.domain.reply.dto;
 
 import lombok.Data;
 
 @Data
 public class SaveReqDto {
 	private int userId;
-	private String title;
+	private int boardId;
 	private String content;
-} 
+}

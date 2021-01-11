@@ -3,8 +3,8 @@ package com.cos.blog.domain.board.dto;
 import lombok.Data;
 
 @Data
-public class SaveReqDto {
-	private int userId;
+public class UpdateReqDto {
+	private int id;
 	private String title;
 	private String content;
-} 
+}

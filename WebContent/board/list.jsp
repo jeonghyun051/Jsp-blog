@@ -22,7 +22,7 @@
 	</div>
 
 	<div class="progress col-md-12 m-2">
-		<div class="progress-bar" style="width: 70%"></div>
+		<div class="progress-bar" style="width: ${currentPosition}%"></div>
 	</div>
 
 	<c:forEach var="BoardList1" items="${BoardList}" varStatus = "stauts">
@@ -37,10 +37,44 @@
 	</c:forEach>
 	
 	<ul class="pagination justify-content-center">
+	<c:choose>
+		<c:when test="${param.page == 0 }">
+		<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		</c:when>
+		<c:otherwise>
 		<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page-1}">Previous</a></li>
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test="${lastPage} == ${param.page }">
+		<li class="page-item disabled"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
+		</c:when>
+		<c:otherwise>
 		<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
+		</c:otherwise>
+	</c:choose>
+		
 	</ul>
 </div>
+
+<script>
+
+var searchval = ${"searchbutton"}.val();
+
+function boardsearch(){
+	.ajax({
+		type: "POST",
+		url: "/blog/board?cmd=search",
+		data: searchval,
+		contentType: "text/plain; charset=utf-8"
+
+		}).done(function(data){
+
+			
+			})
+
+}
+</script>
 
 </body>
 </html>
