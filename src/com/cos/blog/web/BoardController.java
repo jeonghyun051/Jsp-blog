@@ -23,6 +23,7 @@ import com.cos.blog.service.BoardService;
 import com.cos.blog.service.ReplyService;
 import com.cos.blog.utill.Script;
 import com.google.gson.Gson;
+import com.mysql.cj.protocol.a.NativeConstants.IntegerDataType;
 
 // http://localhost:8080/blog/board
 @WebServlet("/board")
@@ -84,7 +85,7 @@ public class BoardController extends HttpServlet {
 			int page = Integer.parseInt(request.getParameter("page"));
 			List<Board> boards = boardService.목록보기(page); // 최초:0 next:1 next:2
 
-			request.setAttribute("BoardList", boards);
+			request.setAttribute("boards", boards);
 
 			int boardCount = boardService.글개수();
 			int lastPage = (boardCount - 1) / 4;
@@ -166,12 +167,18 @@ public class BoardController extends HttpServlet {
 				Script.back(response,"글 수정에 실패하였습니다.");
 			}
 		} else if(cmd.equals("search")) {
-			String searchval = request.getParameter("keyword");  
+			String keyword = request.getParameter("keyword");  
+			int page = Integer.parseInt(request.getParameter("page"));
 					
-			List<Board> searchBoard = boardService.글검색(searchval);
-			request.setAttribute("BoardList", searchBoard);
-			System.out.println("searchBoard 값 : " + searchval);
-			System.out.println("searchBoard 값 : " + searchBoard);
+			List<Board> boards = boardService.글검색(keyword, page);
+			request.setAttribute("boards", boards);
+			
+			int boardCount = boardService.글개수(keyword);
+			int lastPage = (boardCount - 1) / 4;
+			double currentPosition = (double) page / (lastPage) * 100;
+			request.setAttribute("lastPage", lastPage);
+			request.setAttribute("currentPosition", currentPosition);
+			System.out.println("list떳나" + boards);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("board/list.jsp");
 			dispatcher.forward(request, response);
 					

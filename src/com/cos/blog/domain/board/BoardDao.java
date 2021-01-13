@@ -17,7 +17,7 @@ public class BoardDao {
 		String sql = "UPDATE board SET title = ?, content = ? WHERE id = ?";
 		Connection conn = DB.getInstance();
 		PreparedStatement pstmt = null;
-		try {
+		try { 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
@@ -111,7 +111,6 @@ public class BoardDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			List<Board> list = new ArrayList<>();
 			if(rs.next()) {
 				return rs.getInt(1);
 			}	
@@ -123,6 +122,28 @@ public class BoardDao {
 		}
 		return -1;
 	}
+	
+	public int count(String keyword) {
+		String sql = "SELECT count(*) FROM board WHERE title like ?";
+		Connection conn = DB.getInstance();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+			DB.close(conn, pstmt, rs);
+			
+		}
+		return -1;
+	}
+	
 	public List<Board> findAll(int page){
 		// SELECT 해서 Board 객체를 컬렉션에 담아서 리턴
 		String sql = "SELECT * FROM board ORDER BY id DESC LIMIT ?,4"; //0,4 4,4 8,4
@@ -160,17 +181,18 @@ public class BoardDao {
 	}
 	
 
-	public List<Board> searchFind(String searchval){
+	public List<Board> findByKeyword(String keyword, int page){
 		// SELECT 해서 Board 객체를 컬렉션에 담아서 리턴
-		String sql = "SELECT * FROM board WHERE title like ?"; 
+		String sql = "SELECT * FROM board WHERE title like ? ORDER BY id DESC LIMIT ?,4"; 
 		Connection conn = DB.getInstance();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, "%"+searchval+"%");
+			pstmt.setString(1, "%"+keyword+"%");
+			pstmt.setInt(2, page*4);
 			rs = pstmt.executeQuery();
-			List<Board> list = new ArrayList<>();
+			List<Board> boards = new ArrayList<>();
 			
 			while (rs.next()) {
 
@@ -183,9 +205,9 @@ public class BoardDao {
 						.createDate(rs.getTimestamp("createDate"))
 						.build();
 				
-				list.add(board);	
+				boards.add(board);	
 			}
-			return list;		
+			return boards;		
 
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -36,8 +36,6 @@
 				<div class="collapse navbar-collapse" id="collapsibleNavbar">
 					<ul class="navbar-nav">
 						<li class="nav-item"><a class="nav-link"
-							href="<%=request.getContextPath()%>/board?cmd=saveForm">글쓰기</a></li>
-						<li class="nav-item"><a class="nav-link"
 							href="<%=request.getContextPath()%>/user?cmd=updateForm">회원정보</a>
 						</li>
 						<li class="nav-item"><a class="nav-link"

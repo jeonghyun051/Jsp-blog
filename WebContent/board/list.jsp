@@ -25,57 +25,56 @@
 		<div class="progress-bar" style="width: ${currentPosition}%"></div>
 	</div>
 
-	<c:forEach var="BoardList1" items="${BoardList}" varStatus = "stauts">
+	<c:forEach var="boards" items="${boards}" varStatus = "stauts">
 		<div class="card col-md-12 m-2">
 			<div class="card-body">
-				<h4 class="card-title">${BoardList1.title}</h4>
+				<h4 class="card-title">${boards.title}</h4>
 				
-				<a href="/blog/board?cmd=detail&id=${BoardList1.id }" class="btn btn-primary">상세보기</a>
+				<a href="/blog/board?cmd=detail&id=${boards.id }" class="btn btn-primary">상세보기</a>
 			</div>
 		</div>
 	<br />
 	</c:forEach>
 	
 	<ul class="pagination justify-content-center">
+
 	<c:choose>
-		<c:when test="${param.page == 0 }">
-		<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		<c:when test="${empty param.keyword}">	<!-- null이랑 공백을 체크해줌, null이거나 공백이면 실행 -->
+			<c:set var ="pagePrev" value="/blog/board?cmd=list&page=${param.page-1}"></c:set>
+			<c:set var ="pageNext" value="/blog/board?cmd=list&page=${param.page+1}" />
 		</c:when>
 		<c:otherwise>
-		<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page-1}">Previous</a></li>
+			<c:set var ="pagePrev" value="/blog/board?cmd=search&page=${param.page-1}&keyword=${param.keyword }" />
+			<c:set var ="pageNext" value="/blog/board?cmd=search&page=${param.page+1}&keyword=${param.keyword }" />
 		</c:otherwise>
 	</c:choose>
+	
+	<c:choose>
+		<c:when test="${param.page == 0 }">
+			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		</c:when>
+		
+		<c:otherwise>
+			<li class="page-item"><a class="page-link" href="${pageScope.pagePrev}">Previous</a></li>
+			<!-- pageScope: 해당페이지 / requestScope: 요청시마다 새로 만들어짐   
+			     applicationScope: 서버 켜지는 순간부터 꺼지는 순간까지
+				 SessionScope: 브라우저가 닫힐 때 까지 or 세션을 무효화 시킬 때-->
+		</c:otherwise>
+	</c:choose>
+	
 	<c:choose>
 		<c:when test="${lastPage} == ${param.page }">
-		<li class="page-item disabled"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
+			<li class="page-item disabled"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
 		</c:when>
+		
 		<c:otherwise>
-		<li class="page-item"><a class="page-link" href="/blog/board?cmd=list&page=${param.page+1}">Next</a></li>
+			<li class="page-item"><a class="page-link" href="${pageScope.pageNext}">Next</a></li>
 		</c:otherwise>
 	</c:choose>
 		
 	</ul>
+
 </div>
-
-<script>
-
-var searchval = ${"searchbutton"}.val();
-
-function boardsearch(){
-	.ajax({
-		type: "POST",
-		url: "/blog/board?cmd=search",
-		data: searchval,
-		contentType: "text/plain; charset=utf-8"
-
-		}).done(function(data){
-
-			
-			})
-
-}
-</script>
-
 </body>
 </html>
 

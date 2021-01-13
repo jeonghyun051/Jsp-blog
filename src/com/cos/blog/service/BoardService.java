@@ -42,12 +42,16 @@ public class BoardService {
 		return boardDao.findAll(page);
 	}
 	
-	public List<Board> 글검색(String searchval){
-		return boardDao.searchFind(searchval);
+	public List<Board> 글검색(String keyword, int page){
+		return boardDao.findByKeyword(keyword,page);
 	}
 	
 	public int 글개수() {
 		return boardDao.count();
+	}
+	
+	public int 글개수(String keyword) {
+		return boardDao.count(keyword);
 	}
 	
 }

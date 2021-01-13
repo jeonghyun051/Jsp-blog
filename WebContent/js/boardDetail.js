@@ -45,9 +45,11 @@ function replySave(userId, boardId) {
 	}).done(function(result) {
 		if (result.statusCode == 1) {
 			console.log(result);
-			addReply(result.data);
+			//addReply(result.data);
 			$("#content").val("");
-			//location.reload();
+			location.reload();
+			//위에 prepend를 굳이 안해도 reload로 새로고침하면 어차피
+			//select문이 다시 실행되서 값을 뿌려주기 때문에 쉽다.
 location.reload();
 		} else {
 			alert("댓글쓰기 실패");
@@ -72,7 +74,7 @@ function deleteById(boardId){
 	});
 } 
 
-/* function deleteById(boardId){
+ function deleteById(boardId){
 			// 요청과 응답	을 json
 			var data = {
 				boardId: boardId
@@ -92,4 +94,4 @@ function deleteById(boardId){
 					alert("삭제에 실패하였습니다.");
 				}
 			});
-		}*/
+		}
